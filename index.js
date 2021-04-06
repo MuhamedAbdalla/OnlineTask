@@ -4,7 +4,7 @@ const cors = require('cors');
 const constants = require('./config/constants');
 const db_queries = require('./database-operations');
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(body_parser.json());
@@ -14,18 +14,19 @@ app.use(cors());
 app.get(constants.GET_PRODUCT_PAGE_ENDPOINT, async (req, res, next) => {
     const category_id = req.body.category_id;
 
-    res.product_list = await db_queries.Get_Product(category_id);
+    res.product_list = await db_queries.getProduct(category_id);
     next();
-}, paginating_model);
+}, paginatingModel);
 
 // Middleware
-function paginating_model(req, res) {
+function paginatingModel(req, res) {
     const page = req.query.page;
     const limit = (req.body.n !== undefined ? req.body.n : constants.LIMIT);
-    const startIndex = (page - 1) * limit;
+    const start_index = (page - 1) * limit;
+    const end_index = Math.min(start_index + limit, res.product_list.length);
     let lst_products = [];
 
-    for (let i = startIndex; i < Math.min(startIndex + limit, res.product_list.length); i++) {
+    for (let i = start_index; i < end_index; i++) {
         lst_products.push(res.product_list[i]);
     }
     res.product_list = lst_products;
@@ -33,20 +34,22 @@ function paginating_model(req, res) {
 }
 
 // Toggle endPoint
-app.put(constants.TOGGLE_ENDPOINT, async (req, res) => {
+app.post(constants.TOGGLE_ENDPOINT, async (req, res) => {
     let product_id = req.body.product_id;
     let provider_id = req.body.provider_id;
     
-    const isSuccess = await db_queries.Toggle(product_id, provider_id);
+    const is_success = await db_queries.toggle(product_id, provider_id);
 
-    if (isSuccess) {
+    if (is_success) {
         res
-        .status(200)
+        .status(constants.OK)
         .send("Success!!");
     }
-    res
-    .status(500)
-    .send("Something went wrong!!");
+    else {
+        res
+        .status(constants.INTERNAL_SERVER_ERROR)
+        .send("Something went wrong!!");
+    }
 });
 
 app.listen(port, async () => {

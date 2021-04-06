@@ -1,4 +1,4 @@
-const configrations = {
+const config = {
     user: "postgres",
     password: "123",
     host: "localhost",
@@ -6,4 +6,4 @@ const configrations = {
     database: "Fatura"
 };
 
-module.exports = configrations;
+module.exports = config;

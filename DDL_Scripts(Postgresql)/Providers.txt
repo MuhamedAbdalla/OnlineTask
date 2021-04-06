@@ -1,0 +1,11 @@
+CREATE TABLE public.providers
+(
+    id integer NOT NULL,
+    name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT providers_pkey PRIMARY KEY (id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.providers
+    OWNER to postgres;

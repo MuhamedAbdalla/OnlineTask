@@ -1,0 +1,22 @@
+CREATE TABLE public.categories
+(
+    id integer NOT NULL,
+    name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+    parent_id integer NOT NULL,
+    CONSTRAINT categories_pkey PRIMARY KEY (id),
+    CONSTRAINT "Fk_id" FOREIGN KEY (parent_id)
+        REFERENCES public.categories (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.categories
+    OWNER to postgres;
+
+-- Index: fki_Fk_id
+CREATE INDEX "fki_Fk_id"
+    ON public.categories USING btree
+    (parent_id ASC NULLS LAST)
+    TABLESPACE pg_default;

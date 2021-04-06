@@ -1,0 +1,33 @@
+CREATE TABLE public.product_providers
+(
+    products_id integer NOT NULL,
+    providers_id integer NOT NULL,
+    price double precision NOT NULL,
+    available boolean NOT NULL,
+    CONSTRAINT product_providers_pkey PRIMARY KEY (products_id, providers_id),
+    CONSTRAINT fk_1 FOREIGN KEY (products_id)
+        REFERENCES public.products (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT fk_2 FOREIGN KEY (providers_id)
+        REFERENCES public.providers (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.product_providers
+    OWNER to postgres;
+
+-- Index: fki_fk_1
+CREATE INDEX fki_fk_1
+    ON public.product_providers USING btree
+    (products_id ASC NULLS LAST)
+    TABLESPACE pg_default;
+
+-- Index: fki_fk_2
+CREATE INDEX fki_fk_2
+    ON public.product_providers USING btree
+    (providers_id ASC NULLS LAST)
+    TABLESPACE pg_default;

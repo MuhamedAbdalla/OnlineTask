@@ -1,0 +1,17 @@
+CREATE TABLE public.products
+(
+    id integer NOT NULL,
+    name character varying(45) COLLATE pg_catalog."default" NOT NULL,
+    image_url character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    category_id integer NOT NULL,
+    CONSTRAINT products_pkey PRIMARY KEY (id),
+    CONSTRAINT fk_cate_id FOREIGN KEY (category_id)
+        REFERENCES public.categories (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.products
+    OWNER to postgres;

@@ -1,8 +1,8 @@
-const configrations = require('./config/db-connection');
+const config = require('./config/db-connection');
 const {Client} = require('pg');
 
 // Fetching data from callback of database
-function fetch_products(data) {
+function fetchProducts(data) {
     let lst_products = [];
 
     for (let i = 0; i < data.length; i++) {
@@ -17,9 +17,9 @@ function fetch_products(data) {
 }
 
 module.exports = {
-    Toggle: async function Toggle(product_id, provider_id) {
-        let isSuccess = false;
-        const db = new Client(configrations);
+    toggle: async function toggle(product_id, provider_id) {
+        let is_success = false;
+        const db = new Client(config);
         try {
             await db.connect();
             const {rows} = await db.query("SELECT * FROM PRODUCT_PROVIDERS " + 
@@ -32,19 +32,20 @@ module.exports = {
                                         "WHERE PRODUCTS_ID = $2 AND PROVIDERS_ID = $3",
                                             [availability, product_id, provider_id]);
             }
-            isSuccess = true;
+            is_success = true;
         }
         catch (e) {
             console.log("Toggle function throw exception: " + e);
+            console.log(1);
         }
         finally {
             await db.end();
         }
-        return isSuccess;
+        return is_success;
     },
-    Get_Product: async function get_product(category_id) {
+    getProduct: async function getProduct(category_id) {
         let products = [];
-        const db = new Client(configrations);
+        const db = new Client(config);
         try {
             await db.connect();
             const data = (await db.query("SELECT P.ID, P.NAME, P.IMAGE_URL, PP.PRICE " +
@@ -58,7 +59,7 @@ module.exports = {
                                                     "WHERE S.PRODUCTS_ID = P.ID " +
                                                     ") ORDER BY P.ID", 
                                                         [category_id])).rows;
-            products = fetch_products(data);
+            products = fetchProducts(data);
         }
         catch (e) {
             console.log("Getting product throw exception: " + e);

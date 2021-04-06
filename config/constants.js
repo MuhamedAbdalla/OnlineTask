@@ -4,4 +4,7 @@ module.exports = {
     //------------------------------------------API ENDPOINT-------------------------------------------//
     TOGGLE_ENDPOINT: "/toggle",
     GET_PRODUCT_PAGE_ENDPOINT: "/get_product",
+    //------------------------------------------STATUS CODE-------------------------------------------//
+    OK: 200,
+    INTERNAL_SERVER_ERROR: 500,
 }
