@@ -52,11 +52,11 @@ module.exports = {
                                                 "FROM PRODUCTS AS P " +
                                                 "INNER JOIN PRODUCT_PROVIDERS AS PP " +
                                                 "ON P.ID = PP.PRODUCTS_ID " +
-                                                "WHERE P.CATEGORY_ID = $1 AND PP.AVAILABLE = true " +
+                                                "WHERE P.CATEGORY_ID = $1 AND PP.AVAILABLE = TRUE " +
                                                 "AND PP.PRICE = ( " +
                                                     "SELECT MIN(S.PRICE) " +
                                                     "FROM PRODUCT_PROVIDERS AS S " +
-                                                    "WHERE S.PRODUCTS_ID = P.ID " +
+                                                    "WHERE S.PRODUCTS_ID = P.ID AND S.AVAILABLE = TRUE" +
                                                     ") ORDER BY P.ID", 
                                                         [category_id])).rows;
             products = fetchProducts(data);

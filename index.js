@@ -2,7 +2,8 @@ const express = require("express");
 const body_parser = require("body-parser");
 const cors = require('cors');
 const constants = require('./config/constants');
-const db_queries = require('./database-operations');
+const db_queries = require('./db-queries');
+const middlware_manager = require('./middleware-manager');
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -16,22 +17,7 @@ app.get(constants.GET_PRODUCT_PAGE_ENDPOINT, async (req, res, next) => {
 
     res.product_list = await db_queries.getProduct(category_id);
     next();
-}, paginatingModel);
-
-// Middleware
-function paginatingModel(req, res) {
-    const page = req.query.page;
-    const limit = (req.body.n !== undefined ? req.body.n : constants.LIMIT);
-    const start_index = (page - 1) * limit;
-    const end_index = Math.min(start_index + limit, res.product_list.length);
-    let lst_products = [];
-
-    for (let i = start_index; i < end_index; i++) {
-        lst_products.push(res.product_list[i]);
-    }
-    res.product_list = lst_products;
-    res.send(res.product_list);
-}
+}, middlware_manager.paginationMiddlware);
 
 // Toggle endPoint
 app.post(constants.TOGGLE_ENDPOINT, async (req, res) => {
