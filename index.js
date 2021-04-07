@@ -15,7 +15,7 @@ app.use(cors());
 app.get(constants.GET_PRODUCT_PAGE_ENDPOINT, async (req, res, next) => {
     const category_id = req.body.category_id;
 
-    res.product_list = await db_queries.getProduct(category_id);
+    res.model_list = await db_queries.getProduct(category_id);
     next();
 }, middlware_manager.paginationMiddlware);
 
