@@ -1,3 +1,3 @@
 # Private
-Database: Postgresql
-Language: nodejs
+# Database: Postgresql
+# Language: nodejs
